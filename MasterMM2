@@ -1,0 +1,240 @@
+getgenv().SecureMode = true
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+
+local Window = Rayfield:CreateWindow({
+   Name = "Murder Mystery 2",
+   LoadingTitle = "Compactive Script",
+   LoadingSubtitle = "by bl4ckkoza",
+   ConfigurationSaving = {
+      Enabled = true,
+      FolderName = nil, -- Create a custom folder for your hub/game
+      FileName = "Big Hub"
+   },
+   Discord = {
+      Enabled = false,
+      Invite = "noinvitelink", -- The Discord invite code, do not include discord.gg/. E.g. discord.gg/ABCD would be ABCD
+      RememberJoins = true -- Set this to false to make them join the discord every time they load it up
+   },
+   KeySystem = false, -- Set this to true to use our key system
+   KeySettings = {
+      Title = "Untitled",
+      Subtitle = "Key System",
+      Note = "No method of obtaining the key is provided",
+      FileName = "Key", -- It is recommended to use something unique as other scripts using Rayfield may overwrite your key file
+      SaveKey = true, -- The user's key will be saved, but if you change the key, they will be unable to use your script
+      GrabKeyFromSite = false, -- If this is true, set Key below to the RAW site you would like Rayfield to get the key from
+      Key = {"Hello"} -- List of keys that will be accepted by the system, can be RAW file links (pastebin, github etc) or simple strings ("hello","key22")
+   }
+})
+
+local HomeTab = Window:CreateTab("Home", nil) -- Title, Image
+
+local Label = HomeTab:CreateLabel("Welcome to the script.it was made for Fun!")
+
+local Label = HomeTab:CreateLabel("Youtube: https://www.youtube.com/channel/UCnRkMz-QnhKfzDUxAAyrzOA")
+
+local MainTab = Window:CreateTab("Main", nil) -- Title, Image
+
+local Button = MainTab:CreateButton({
+   Name = "Godmode",
+   Callback = function()
+        local Player = game.Players.LocalPlayer
+local Character = Player.Character
+local Humanoid = Character.Humanoid
+ 
+print('Godmode working.')
+ 
+Humanoid.MaxHealth = 999999
+Humanoid.Health = Humanoid.MaxHealth / 2
+ 
+Humanoid.HealthChanged:connect(function()
+	if Humanoid.Health < 10 then
+		Humanoid.Health = Humanoid.MaxHealth
+	end
+end)
+   end,
+})
+
+local Toggle = MainTab:CreateToggle({
+   Name = "Fly (G)",
+   CurrentValue = false,
+   Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(Value)
+        repeat wait() 
+	until game.Players.LocalPlayer and game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:findFirstChild("Head") and game.Players.LocalPlayer.Character:findFirstChild("Humanoid") 
+local mouse = game.Players.LocalPlayer:GetMouse() 
+repeat wait() until mouse
+local plr = game.Players.LocalPlayer 
+local torso = plr.Character.Head 
+local flying = false
+local deb = true 
+local ctrl = {f = 0, b = 0, l = 0, r = 0} 
+local lastctrl = {f = 0, b = 0, l = 0, r = 0} 
+local maxspeed = 400 
+local speed = 5000 
+
+function Fly() 
+local bg = Instance.new("BodyGyro", torso) 
+bg.P = 9e4 
+bg.maxTorque = Vector3.new(9e9, 9e9, 9e9) 
+bg.cframe = torso.CFrame 
+local bv = Instance.new("BodyVelocity", torso) 
+bv.velocity = Vector3.new(0,0.1,0) 
+bv.maxForce = Vector3.new(9e9, 9e9, 9e9) 
+repeat wait() 
+plr.Character.Humanoid.PlatformStand = true 
+if ctrl.l + ctrl.r ~= 0 or ctrl.f + ctrl.b ~= 0 then 
+speed = speed+.5+(speed/maxspeed) 
+if speed > maxspeed then 
+speed = maxspeed 
+end 
+elseif not (ctrl.l + ctrl.r ~= 0 or ctrl.f + ctrl.b ~= 0) and speed ~= 0 then 
+speed = speed-1 
+if speed < 0 then 
+speed = 0 
+end 
+end 
+if (ctrl.l + ctrl.r) ~= 0 or (ctrl.f + ctrl.b) ~= 0 then 
+bv.velocity = ((game.Workspace.CurrentCamera.CoordinateFrame.lookVector * (ctrl.f+ctrl.b)) + ((game.Workspace.CurrentCamera.CoordinateFrame * CFrame.new(ctrl.l+ctrl.r,(ctrl.f+ctrl.b)*.2,0).p) - game.Workspace.CurrentCamera.CoordinateFrame.p))*speed 
+lastctrl = {f = ctrl.f, b = ctrl.b, l = ctrl.l, r = ctrl.r} 
+elseif (ctrl.l + ctrl.r) == 0 and (ctrl.f + ctrl.b) == 0 and speed ~= 0 then 
+bv.velocity = ((game.Workspace.CurrentCamera.CoordinateFrame.lookVector * (lastctrl.f+lastctrl.b)) + ((game.Workspace.CurrentCamera.CoordinateFrame * CFrame.new(lastctrl.l+lastctrl.r,(lastctrl.f+lastctrl.b)*.2,0).p) - game.Workspace.CurrentCamera.CoordinateFrame.p))*speed 
+else 
+bv.velocity = Vector3.new(0,0.1,0) 
+end 
+bg.cframe = game.Workspace.CurrentCamera.CoordinateFrame * CFrame.Angles(-math.rad((ctrl.f+ctrl.b)*50*speed/maxspeed),0,0) 
+until not flying 
+ctrl = {f = 0, b = 0, l = 0, r = 0} 
+lastctrl = {f = 0, b = 0, l = 0, r = 0} 
+speed = 0 
+bg:Destroy() 
+bv:Destroy() 
+plr.Character.Humanoid.PlatformStand = false 
+end 
+mouse.KeyDown:connect(function(key) 
+if key:lower() == "g" then 
+if flying then flying = false 
+else 
+flying = true 
+Fly() 
+end 
+elseif key:lower() == "w" then 
+ctrl.f = 1 
+elseif key:lower() == "s" then 
+ctrl.b = -1 
+elseif key:lower() == "a" then 
+ctrl.l = -1 
+elseif key:lower() == "d" then 
+ctrl.r = 1 
+end 
+end) 
+mouse.KeyUp:connect(function(key) 
+if key:lower() == "w" then 
+ctrl.f = 0 
+elseif key:lower() == "s" then 
+ctrl.b = 0 
+elseif key:lower() == "a" then 
+ctrl.l = 0 
+elseif key:lower() == "d" then 
+ctrl.r = 0 
+end 
+end)
+Fly()
+   end,
+})
+
+local Toggle = MainTab:CreateToggle({
+   Name = "Autofarm coins",
+   CurrentValue = false,
+   Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(Value)
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Sx-p0t/MM2-Autofarm-OP/main/Script.lua", true))()
+   end,
+})
+
+local Button = MainTab:CreateButton({
+   Name = "Grab Gun",
+   Callback = function()
+        local script = Instance.new('LocalScript')
+ 
+ 
+		local currentX = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.X
+		local currentY = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.Y
+		local currentZ = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.Z	
+ 
+		if workspace:FindFirstChild("GunDrop") ~= nil then
+ 
+			game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = workspace:FindFirstChild("GunDrop").CFrame	
+		wait(.25)	
+			game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(currentX, currentY, currentZ)
+ 
+		else
+ 
+game:GetService("StarterGui"):SetCore("SendNotification",{
+Title = "Error!",
+Text = "Failed To Get the gun , Be faster next time retard",
+Duration = 7,
+Button1 = "OK",
+Callback = cb
+})
+ 
+ 
+		wait(3)
+ 
+ 
+		end
+
+local Toggle = MainTab:CreateToggle({
+   Name = "Infinite Jump",
+   CurrentValue = false,
+   Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(Value)
+        local infjmp = true
+game:GetService("UserInputService").jumpRequest:Connect(function()
+    if infjmp then
+        game:GetService"Players".LocalPlayer.Character:FindFirstChildOfClass"Humanoid":ChangeState("Jumping")
+    end
+end)
+   end,
+})
+   end,
+})
+
+local LuaTab = Window:CreateTab("Lua", nil) -- Title, Image
+
+local Button = LuaTab:CreateButton({
+   Name = "Eclipse MM2",
+   Callback = function()
+        loadstring(game:HttpGet(('https://raw.githubusercontent.com/Ethanoj1/EclipseMM2/master/Script'),true))()
+   end,
+})
+
+local Button = LuaTab:CreateButton({
+   Name = "Infiniteyield",
+   Callback = function()
+        loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'))()
+   end,
+})
+
+local EliteTab = Window:CreateTab("Elite", nil) -- Title, Image
+
+local Button = EliteTab:CreateButton({
+   Name = "Crash Server",
+   Callback = function()
+        game.StarterGui:SetCore("SendNotification", {
+    Title = "Subscribe To Mr Jim Ph";
+    Text = "Subscribe For More Scripts"; -- what the text says (ofc)
+    Duration = 60;
+})
+ 
+for _,s in 
+pairs(game.Players.LocalPlayer.Character:GetDescendants()) do
+    if s:IsA("Motor6D") and s.Name ~= "Neck" then
+        local fard = s.Parent
+        s:Destroy()
+        fard.CFrame = CFrame.new(9e9 * _,9e9* _,9e9*_)
+        wait()
+    end
+end
+   end,
+})
